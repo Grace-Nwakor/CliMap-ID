@@ -4,3 +4,4 @@ import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App />);
+<script type="module" src="/src/index.jsx"></script>
