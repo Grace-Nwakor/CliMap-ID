@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CliMap ID</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    input, textarea, button { width: 100%; padding: 12px; margin-top: 8px; }
+    .card { padding: 15px; margin-top: 20px; border: 1px solid #ddd; border-radius: 8px; }
+  </style>
+</head>
+
+<body>
+  <h1>CliMap ID — Community Verifier</h1>
+
+  <h3>Add Community</h3>
+  <input id="name" placeholder="Community Name" />
+  <input id="state" placeholder="State" />
+  <input id="lga" placeholder="LGA" />
+  <input id="lat" placeholder="Latitude" />
+  <input id="lng" placeholder="Longitude" />
+  <input id="risk" placeholder="Vulnerability Level (Low/Medium/High)" />
+  <textarea id="desc" placeholder="Description"></textarea>
+  <button onclick="saveCommunity()">Save Community</button>
+
+  <h2>Community List</h2>
+  <div id="list"></div>
+
+  <script>
+    const supabase = supabase.createClient(
+      "YOUR_SUPABASE_URL",
+      "YOUR_SUPABASE_ANON_KEY"
+    );
+
+    async function saveCommunity() {
+      const { data, error } = await supabase.from("communities").insert([{
+        name: document.getElementById("name").value,
+        state: document.getElementById("state").value,
+        lga: document.getElementById("lga").value,
+        latitude: document.getElementById("lat").value,
+        longitude: document.getElementById("lng").value,
+        vulnerability_level: document.getElementById("risk").value,
+        description: document.getElementById("desc").value
+      }]);
+
+      if (error) alert(error.message);
+      else alert("Community Saved!");
+
+      loadCommunities();
+    }
+
+    async function loadCommunities() {
+      const { data } = await supabase.from("communities").select("*");
+      
+      let html = "";
+      data.forEach(c => {
+        html += `
+          <div class='card'>
+            <h3>${c.name}</h3>
+            <p><b>State:</b> ${c.state}</p>
+            <p><b>LGA:</b> ${c.lga}</p>
+            <p><b>Risk:</b> ${c.vulnerability_level}</p>
+            <p><b>Location:</b> ${c.latitude}, ${c.longitude}</p>
+            <p>${c.description}</p>
+          </div>
+        `;
+      });
+
+      document.getElementById("list").innerHTML = html;
+    }
+
+    loadCommunities();
+  </script>
+</body>
+</html>
