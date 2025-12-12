@@ -1,12 +1,16 @@
 {
   "name": "climap-id",
   "version": "1.0.0",
-  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0"
   },
-  "scripts": {
-    "start": "echo 'React start script will run here after deployment'",
-    "build": "echo 'React build script will run here after deployment'"
+  "devDependencies": {
+    "vite": "^5.0.0"
   }
 }
